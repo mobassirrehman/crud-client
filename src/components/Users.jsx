@@ -7,17 +7,26 @@ const Users = () => {
     const email = e.target.email.value;
     console.log(name, email);
 
+    const newUser = { name, email };
+
     //save user to the server
     fetch("http://localhost:3000/users", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ name, email }),
+      body: JSON.stringify(newUser),
     })
       .then((res) => res.json())
       .then((data) => {
         console.log("after saving user", data);
+        if (data.insertedId) {
+          alert("users added successfuly");
+          e.target.reset();
+        }
+      })
+      .catch((error) => {
+        console.error("Error adding user:", error);
       });
   };
   return (

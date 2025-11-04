@@ -1,6 +1,10 @@
-import React from "react";
+import React, { use, useState } from "react";
 
-const Users = () => {
+const Users = ({ usersPromise }) => {
+  const initialUsers = use(usersPromise);
+  const [users, setUsers] = useState(initialUsers);
+  console.log(usersPromise);
+
   const handleAddUsers = (e) => {
     e.preventDefault();
     const name = e.target.name.value;
@@ -21,6 +25,9 @@ const Users = () => {
       .then((data) => {
         console.log("after saving user", data);
         if (data.insertedId) {
+          newUser._id = data.insertedId;
+          const newUsers = [...users, newUser];
+          setUsers(newUsers);
           alert("users added successfuly");
           e.target.reset();
         }
@@ -38,6 +45,14 @@ const Users = () => {
         <br />
         <input type="submit" value="Add User" />
       </form>
+      <p>-=-=-=-=-=-=-=-=-</p>
+      <div>
+        {users.map((user) => (
+          <p key={user._id}>
+            {user.name} : {user.email}
+          </p>
+        ))}
+      </div>
     </div>
   );
 };
